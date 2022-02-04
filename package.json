@@ -16,6 +16,8 @@
     "express": "^4.17.2",
     "moment": "^2.29.1",
     "mongoose": "^6.1.8",
-    "node-fetch": "^2.6.7"
+    "node-binance-api": "^0.13.1",
+    "node-fetch": "^2.6.7",
+    "talib": "^1.1.4"
   }
 }

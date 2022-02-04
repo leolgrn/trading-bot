@@ -1,6 +1,6 @@
 
 module.exports = server => {
     return {
-      getHistoday: require('./getHistoday')(server)
+      histoData: require('./histoData')(server)
     }
 }

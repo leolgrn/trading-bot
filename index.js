@@ -14,3 +14,11 @@ server.listen(process.env.PORT, () => {
     console.log(`Server starting listening on ${process.env.PORT}`);
 })
 
+const run = async () => {
+    server.services.binance.sell("ETH", 0.004)
+        .then(console.log)
+        .catch(console.error);
+}
+
+//run();
+
