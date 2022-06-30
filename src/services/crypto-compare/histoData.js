@@ -68,7 +68,7 @@ module.exports = server => {
 
         const promises = limitsAndEndDate.map(item => {
             return new Promise((resolve, reject) => {
-                fetch(`https://min-api.cryptocompare.com/data/v2/${url}?fsym=${symbol}&tsym=EUR&limit=${item.limit}&toTs=${item.endDateTS}`, {
+                fetch(`https://min-api.cryptocompare.com/data/v2/${url}?fsym=${symbol}&tsym=USDT&limit=${item.limit}&toTs=${item.endDateTS}`, {
                     headers: {
                         "Authorization": `Apikey ${process.env.API_KEY}`
                     }

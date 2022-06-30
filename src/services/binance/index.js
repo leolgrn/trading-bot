@@ -16,6 +16,11 @@ module.exports = server => {
         sell: (symbol, quantity) => {
             return binance.marketSell(symbol + "USDT", quantity)
         },
-        fee: (quantity) => { return quantity * FEE_RATE}
+        fee: (quantity) => { 
+            return quantity * FEE_RATE / 100
+        },
+        listCrypto: () => { 
+            return binance.prices() 
+        }
     }
 }

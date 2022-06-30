@@ -21,6 +21,8 @@ module.exports = async server => {
   console.log("Connected to mongo database")
 
   server.models = {
-
+    history: require("./History")(connection),
+    strategy: require("./Strategy")(connection)
   }
+  
 }

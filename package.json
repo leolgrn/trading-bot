@@ -18,6 +18,7 @@
     "mongoose": "^6.1.8",
     "node-binance-api": "^0.13.1",
     "node-fetch": "^2.6.7",
+    "node-schedule": "^2.1.0",
     "talib": "^1.1.4"
   }
 }
