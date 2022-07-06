@@ -24,7 +24,7 @@ const run = async () => {
 
     //run();
 
-    server.controllers.scheduled.job();
+    //server.controllers.scheduled.job();
 
     //schedule.scheduleJob('* * * * *', server.controllers.scheduled.job);
 }

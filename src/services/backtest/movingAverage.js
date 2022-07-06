@@ -8,25 +8,35 @@ module.exports = server => {
 
         let cash = 100;
         let holding = false;
-        let canStartBuying = false;
+        let canBuy = false;
         let quantityHolding = 0;
         let transactions = [];
+
         let buy = null;
         let sell = null;
 
         for(let i = 0; i < movingAverage1.length; i++){
             if(movingAverage1[i] !== null && movingAverage2[i] !== null && movingAverage3[i] !== null){
-                canStartBuying = movingAverage1[i] < movingAverage2[i] || movingAverage1[i] < movingAverage3[i] || movingAverage2[i] < movingAverage3[i];
+                const canBuy2 = movingAverage1[i] < movingAverage2[i] || movingAverage1[i] < movingAverage3[i] || movingAverage2[i] < movingAverage3[i];
+                canBuy = canBuy2;
                 break;
             }
         }
 
+        let falseHolding = false;
+
         for(let i = 0; i < movingAverage1.length; i++){
             if(movingAverage1[i] !== null && movingAverage2[i] !== null && movingAverage3[i] !== null){
-                const bullish = movingAverage1[i] > movingAverage2[i] && movingAverage1[i] > movingAverage3[i] && movingAverage2[i] > movingAverage3[i];
-                const bearish = movingAverage1[i] < movingAverage2[i] || movingAverage1[i] < movingAverage3[i] || movingAverage2[i] < movingAverage3[i];
-                if(canStartBuying){
-                    if(bullish && !holding){
+
+                const bullish1 = movingAverage1[i] > movingAverage2[i];
+                const bullish2 = bullish1 && movingAverage1[i] > movingAverage3[i] && movingAverage2[i] > movingAverage3[i];
+                const bearish1 = movingAverage1[i] < movingAverage2[i];
+                const bearish2 = bearish1 || movingAverage1[i] < movingAverage3[i] || movingAverage2[i] < movingAverage3[i];
+
+                //const diffIsEnough = ((movingAverage1[i] - movingAverage3[i]) * 100 / movingAverage1[i]) > 2;
+                
+                if(canBuy){
+                    if(bullish2 && !holding && !falseHolding){
                         transactions.push({
                             buy: {
                                 date: time[i],
@@ -41,7 +51,10 @@ module.exports = server => {
                             buy = true;
                         }
                     }
-                    if(!bullish && holding){
+                    if(bullish1){
+                        falseHolding = true;
+                    }
+                    if(bearish2 && holding && !falseHolding){
                         cash = quantityHolding * close[i];
                         cash = cash - server.services.binance.fee(cash);
                         quantityHolding = 0;
@@ -56,9 +69,12 @@ module.exports = server => {
                             sell = true;
                         }
                     }
+                    if(bearish1){
+                        falseHolding = false;
+                    }
                 } else {
-                    if(bearish){
-                        canStartBuying = true;
+                    if(bearish1){
+                        canBuy = true;
                     }
                 }
             }

@@ -3,7 +3,7 @@ const talib = require("talib");
 module.exports = server => {
 
     const colors = [
-        "#36A2EB",
+        "#FF6384",
         "#9966FF"
     ]
 
@@ -39,16 +39,22 @@ module.exports = server => {
             try {
                 const {startDate, endDate, symbol, type, unit, periods} = params;
 
-                const data = await server.services.cryptoCompare.histoData(startDate, endDate, symbol, unit)
+                const maxPeriod = Math.max(...periods);
+
+                const data = await server.services.cryptoCompare.histoData(startDate, endDate, maxPeriod, symbol, unit)
 
                 const promises = [];
                 for(let i = 0; i < periods.length; i++){
-                    promises.push(applyMovingAverage(data, type, periods[i], colors[i]));
+                    promises.push(applyMovingAverage(data, type, periods[i], colors[i], maxPeriod));
                 }
 
                 Promise.all(promises)
                     .then(results => {
                         for(let result of results) data.indicators.push(result);
+                        data.indicators.forEach(indicator => {
+                            indicator.values = indicator.values.slice(maxPeriod);
+                        })
+                        data.time = data.time.slice(maxPeriod);
                         return data;
                     })
                     .then(resolve)

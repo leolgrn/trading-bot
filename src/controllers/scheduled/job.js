@@ -16,7 +16,6 @@ module.exports = server => {
             };
             const result = await server.services.talib.movingAverage(body);
             const data = await server.services.backtest.movingAverage(result);
-            console.log(data.signals);
             if(data.signals.buy){
                 server.services.binance.buy()
             }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ."
+    "start": "nodemon ."
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "node-binance-api": "^0.13.1",
     "node-fetch": "^2.6.7",
     "node-schedule": "^2.1.0",
+    "nodemon": "^2.0.18",
     "talib": "^1.1.4"
   }
 }

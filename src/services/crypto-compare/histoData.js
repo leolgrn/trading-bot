@@ -4,22 +4,22 @@ module.exports = server => {
 
     const formatData = (data) => {
         return {
-            time: data.map(item => moment.unix(item.time).format("DD-MM-YYYY")),
+            time: data.map(item => moment.unix(item.time).format("DD-MM-YYYY HH:MM")),
             indicators: [
                 {
                     name: "open",
                     values: data.map(item => item.open),
-                    color: "#FF6384"
+                    color: "#FFCD56"
                 },
                 {
                     name: "high",
                     values: data.map(item => item.high),
-                    color: "#36A2EB"
+                    color: "#FF6384"
                 },
                 {
                     name: "close",
                     values: data.map(item => item.close),
-                    color: "#FFCD56"
+                    color: "#36A2EB"
                 },
                 {
                     name: "low",
@@ -58,12 +58,13 @@ module.exports = server => {
         return limitsAndEndDate.reverse();
     }
 
-    return async (startDate, endDate, symbol, type) => {
+    return async (startDate, endDate, maxPeriod, symbol, type) => {
 
         const [ url, unit ] = getUrlAndUnit(type);
 
         const [ startDateFormatted, endDateFormatted ] = server.utils.format(startDate, endDate);
-        const daysBetween = endDateFormatted.diff(startDateFormatted, unit);
+        const startDateFormattedMinusMaxPeriod = startDateFormatted.clone().subtract(maxPeriod, unit);
+        const daysBetween = endDateFormatted.diff(startDateFormattedMinusMaxPeriod, unit);
         const limitsAndEndDate = getLimitsAndEndDates(daysBetween, endDateFormatted, unit);
 
         const promises = limitsAndEndDate.map(item => {
